@@ -5,16 +5,16 @@ App = {
   init: async function() {
     // Load pets.
     $.getJSON('../plants.json', function(data) {
-      var petsRow = $('#petsRow');
-      var petTemplate = $('#petTemplate');
+      var plantsRow = $('#plantsRow');
+      var plantTemplate = $('#plantTemplate');
 
       for (i = 0; i < data.length; i ++) {
-        petTemplate.find('.panel-title').text(data[i].name);
-        petTemplate.find('img').attr('src', data[i].picture);
-        petTemplate.find('.pet-breed').text(data[i].description);        
-        petTemplate.find('.btn-adopt').attr('data-id', data[i].id);
+        plantTemplate.find('.panel-title').text(data[i].name);
+        plantTemplate.find('img').attr('src', data[i].picture);
+        plantTemplate.find('.plant-description').text(data[i].description);        
+        plantTemplate.find('.btn-buy').attr('data-id', data[i].id);
 
-        petsRow.append(petTemplate.html());
+        plantsRow.append(plantTemplate.html());
       }
     });
 
@@ -55,28 +55,28 @@ App = {
       // Set the provider for our contract
       App.contracts.Purchase.setProvider(App.web3Provider);
     
-      // Use our contract to retrieve and mark the adopted pets
-      return App.markAdopted();
+      // Use our contract to retrieve and mark the purchased plants
+      return App.markPurchased();
     });
 
     return App.bindEvents();
   },
 
   bindEvents: function() {
-    $(document).on('click', '.btn-adopt', App.handleAdopt);
+    $(document).on('click', '.btn-buy', App.handlePurchase);
   },
 
-  markAdopted: function(adopters, account) {
-    var adoptionInstance;
+  markPurchased: function(adopters, account) {
+    var plantInstance;
 
     App.contracts.Purchase.deployed().then(function(instance) {
-      adoptionInstance = instance;
+      plantInstance = instance;
 
-      return adoptionInstance.getBuyers.call();
+      return plantInstance.getBuyers.call();
     }).then(function(buyers) {
       for (i = 0; i < buyers.length; i++) {
         if (buyers[i] !== '0x0000000000000000000000000000000000000000') {
-          $('.panel-pet').eq(i).find('button').text('Success').attr('disabled', true);
+          $('.panel-plant').eq(i).find('button').text('Success').attr('disabled', true);
         }
       }
     }).catch(function(err) {
@@ -84,8 +84,8 @@ App = {
     });
   },
 
-  handleAdopt: function(event) {
-    event.preventDefault();
+  handlePurchase: function(event) {
+    event.preventDefault();        
 
     var plantId = parseInt($(event.target).data('id'));
 
@@ -104,7 +104,7 @@ App = {
         // Execute adopt as a transaction by sending account
         return purchaseInstance.buy(plantId, {from: account, gasPrice: 59240000});
       }).then(function(result) {
-        return App.markAdopted();
+        return App.markPurchased();
       }).catch(function(err) {
         console.log(err.message);
       });

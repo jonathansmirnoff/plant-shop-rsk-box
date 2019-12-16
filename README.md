@@ -1,6 +1,6 @@
-# Pet Shop Truffle Box
+# Plant Shop Truffle Box
 
-This box has all you need to get started with our [Pet Shop tutorial](http://truffleframework.com/tutorials/pet-shop).
+This box has all you need to get start using the Plant Shop at RSK Network. It includes network configs for Mainnet and Testnet.
 
 ## Installation
 
@@ -11,18 +11,29 @@ This box has all you need to get started with our [Pet Shop tutorial](http://tru
 
 2. Download the box. This also takes care of installing the necessary dependencies.
     ```javascript
-    truffle unbox pet-shop
+    truffle unbox plant-shop
     ```
 
-3. Run the development console.
+3. Run the development console. 
+You can start a truffle console for any RSK network
     ```javascript
-    truffle develop
+    # Console for Mainnet
+    truffle console --network mainnet
+
+    # Console forn Testnet
+    truffle console --network testnet
     ```
 
 4. Compile and migrate the smart contracts. Note inside the development console we don't preface commands with `truffle`.
     ```javascript
     compile
-    migrate
+    
+    # Migrate for Mainnet
+    migrate --network mainnet
+
+    # Migrate for Testnet
+    migrate --network testnet
+
     ```
 
 5. Run the `liteserver` development server (outside the development console) for front-end hot reloading. Smart contract changes must be manually recompiled and migrated.
@@ -30,9 +41,6 @@ This box has all you need to get started with our [Pet Shop tutorial](http://tru
     // Serves the front-end on http://localhost:3000
     npm run dev
     ```
-
-**NOTE**: This box is not a complete dapp, but the starting point for the [Pet Shop tutorial](http://truffleframework.com/tutorials/pet-shop). You'll need to complete that for this to function.
-
 ## FAQ
 
 * __How do I use this with the EthereumJS TestRPC?__
